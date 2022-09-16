@@ -1,0 +1,1998 @@
+SQL NOTES
+    
+CREATE  TABLE  customers
+(custno   number(3)    CONSTRAINT  customers_custno_pk   primary  key,
+ custname varchar2(20) CONSTRAINT  customers_custname_nn  not null,
+ address  varchar2(150),
+ phone    varchar2(15)
+);
+
+
+ INSERT  INTO  customers
+ VALUES (101, 'abc corp', 'chennai', '1234567');
+
+
+ INSERT  INTO  customers
+ VALUES (101, 'amrutha corp', 'pune', '1234567');
+---------------------------------------------------------------
+
+items
+    itemno          n(3)    pk
+    itemname        v(20)   nn
+    unitprice       n(7,2)  it should be non-zero and non-negative
+    opstock         n(4)
+
+
+
+-=======================================================================================================================
+
+
+Oracle 
+------
+Oracle is an RDBMS (Relational Database Management System)
+
+Database
+    repository of data
+Database Objects
+    table, views, indexes, synonyms, sequences etc.,
+Database Management 
+    Collection of tools that are used to manage the Database.
+
+data            : collection of raw facts
+data processing : inserting/deleting/modifying/sorting
+information     : output of data processing
+
+6 subjects - individual subject marks are given to class teacher     (data)
+progress report - individual subject marks, total marks, grade, rank (information)
+
+account statments (information) which is madeup of transactions (data)
+
+Oracle 5            MS-DOS Based    
+Oracle 6            MS-DOS Based
+
+Oracle 7, 7.1, 8
+Oracle 8i           (i stands for )
+
+Oracle 9i           widely used
+
+Oracle 10g          Express Editions  (free - learners / trainers / colleges)
+Oracle 11g      -   g for grid computing
+
+Oracle 12c
+
+What is the latest version ?        Oracle 18c      (c stands for cloud computing)
+    expression edition 
+
+www.oracle.com          (free download for express editions)
+
+user name & password
+user name: sys
+password : .....
+
+
+
+default user names:  (admin accounts)
+system
+sys
+
+Database users:
+---------------
+1) End users  (Naive Users)
+2) Developers
+3) Adminstrators - installing, creating and managing user accounts, managing databases
+
+from oracle 10g, they offer one special account 
+user name : hr
+password : hr
+
+1) first connect as system or sys.
+2) then use the following steps:
+
+sql> alter user hr account unlock;
+account unlocked
+
+sql> alter user hr identified by hr;
+user altered
+
+sql> connect
+user name : hr
+password : hr
+
+sql> show user
+user is "hr"
+
+
+In order to talk to a database, we need SQL (Structured Query Language)
+sequel is the initial name for SQL.
+
+Various RDBMS products:
+-----------------------
+1) Oracle
+2) MS SQL Server
+3) MySQL
+4) SQLite
+5) PostGre SQL
+
+SQL Commands are classified as ...
+1) DDL  (data definition language) commands     [CREATE | RENAME | ALTER | TRUNCATE | DROP]
+2) DML  (data manipulation)                     [INSERT | UPDATE | DELETE]
+3) DCL  (data control)                          [GRANT | REVOKE]
+4) DQL / DRL  (data query / data retrieval)     [SELECT]
+5) TCL  (Transaction control)                   [COMMIT | ROLLBACK | SAVEPOINT]
+
+1) SQL is Case InSensitive Language.
+2) Clauses must be given in different lines.
+3) table names are plural.
+4) SQL command must be terminated by a semi-colon(;)
+
+
+SQL Data types:
+----------------
+1) CHAR([w])    : to store fixed-length values, whose width can be 2000 characters.
+                  default width 1.  (spaces are embedded)
+2) VARCHAR(w)   : to store varying-length values, whose width can be 4000 characters.
+   VARCHAR2(w)
+
+   till oracle 6 version, it was called as VARCHAR.
+   later on oracle calling it as VARCHAR2
+3) NUMBER(w [,s])   numeric values upto width 'w' and scale 's'.
+4) DATE         : to store data values within range Jan 1 st 4712 B.C. to 31 st Dec 9999 A.D.
+                  default date format is dd-mon-yyyy   (eg: 05-jun-2020)
+
+5) LONG         : to store large amount of data upto 2GB.
+                  only one LONG column is allowed per table.
+6) RAW          : to store binary data such as images, pictures upto 2000 bytes.
+7) LONG RAW     : LONG + RAW
+
+
+
+creating a table:
+-----------------
+CREATE   TABLE   tablename
+(column_name    datatype,
+ column_name    datatype,
+ .....
+)
+
+emps (empno, ename, doj, salary)
+
+CREATE  TABLE emps
+(empno   number(4),
+ ename   varchar2(20),
+ doj     date,
+ salary  number(7,2)
+ );
+
+how to diplay all your tables?
+-------------------------------
+SELECT tname
+FROM   tab;
+
+(or)
+
+SELECT  table_name
+FROM    user_tables;
+
+how to display the structure of the table?
+--------------------------------------------
+structure - column name and other details.
+
+
+Oracle however offer SQL commands.
+Apart from that, Oracle created some extra commands, known as SQL*Plus Commands.
+
+DESCRIBE is SQL*Plus commands and hence it do not need semi-colon terminator.
+it can be abbreviated.
+
+DESCRIBE   emps
+(or)
+DESC   emps
+
+INSERT: 
+1) to add new rows.
+2) character and date literals must be enclosed within single quotes.
+
+syntax:
+-------
+INSERT   INTO  tablename  [ (col-1, col-2, ...) ]
+VALUES   (value-1, value-2, ....);
+
+INSERT INTO emps
+VALUES (101, 'srinivas', '15-sep-2001', 30000 );
+
+INSERT INTO emps (empno, ename, doj)
+VALUES (102, 'prabha' , '16-sep-2001');
+
+INSERT INTO emps 
+VALUES (104, 'surya', null, 14000);
+
+INSERT INTO emps (empno, doj, salary, ename)
+VALUES (105, '10-oct-2002', 15200, 'sudha');
+
+
+SELECT:
+-------
+to retrieve data 
+
+SELECT  *
+FROM   emps;
+
+UPDATE:
+--------
+TO MODIFY ROWS.
+
+UPDATE   tablename
+SET  col-1 = value-1  [, col-2 = value-2 ,....]
+[WHERE  condition];
+
+UPDATE   emps
+SET  salary = 12300
+WHERE  empno = 102;
+
+UPDATE   emps
+SET  doj = '5-nov-2001'
+WHERE  ename = 'surya';
+
+increase the salary of all employees by 10% of their salary.
+
+UPDATE  emps
+SET  salary = salary + (salary * 10 / 100);
+
+
+DELETE:
+-------
+to delete rows.
+
+DELETE  FROM  tablename
+[WHERE   condition];
+
+DELETE  FROM  emps
+WHERE  empno = 101;
+
+DELETE  FROM  emps;
+
+TRUNCATE  TABLE:
+-----------------
+to delete all rows from the table 
+
+TRUNCATE  TABLE  emps;
+
+DROP TABLE:
+-----------
+DROP TABLE emps;
+
+
+                    INTEGRITY CONSTRAINTS
+                    ----------------------
+These are conditions given for a column (or) combination of columns.
+During DML operations, if we violate any of these rules, oracle server generate error message.
+
+constraint:
+----------------------
+1) NOT NULL
+2) UNIQUE
+3) PRIMARY KEY
+4) FOREIGN KEY   (REFERENCES)
+5) CHECK  (condition)
+
+constraint options:
+---------------------
+  do not allow constraint names.
+
+1) DEFAULT
+2) ENABLE / DISABLE
+3) ON DELETE CASCADE   (specified in conjunction with REFERENCES)
+
+primary key:   (not null && unique)
+-----------------------------------------
+1) is used to identify uniquely each row
+2) a table can have only one primary key
+3) null values are not allowed
+4) duplicate values are not allowed
+5) it is a single column or combination of columns
+5) for every primary key, a unique is index is generated automatically. 
+   this index is used by "Query Optimizer" whenever a predicate clause is used while querying.
+
+foreign key :
+----------------------------------------
+1) used to establish a relation between parent (master | independent) and child tables (dependent)
+2) it always present in child table
+3) it is a column or combination of columns   
+4) null values are allowed
+5) duplicates are also allowed.
+6) every foreign key must be defined as primary key or unique key in it's parent table.
+7) a table can have many foreign key
+
+
+
+alternate key:
+---------------
+
+complex key:   (composite key)
+----------------------------------
+if any constraint is given for combination of columns then such combination is called complex key.
+
+
+
+                            ORDER PROCESSING SYSTEM
+                            -----------------------
+customers
+    custno          n(3)    pk
+    custname        v(20)   nn
+    address         v(150)
+    phone           v(15)
+
+items
+    itemno          n(3)    pk
+    itemname        v(20)   nn
+    unitprice       n(7,2)  it should be non-zero and non-negative
+    opstock         n(4)    
+
+  ITEMNO ITEMNAME              UNITPRICE    OPSTOCK
+---------- -------------------- ---------- ----------
+       901 mouse                       100          0
+       902 webcam                      800          0
+       903 ram                        1200          0
+orders
+    orderno         n(3)    pk
+    custno          n(3)    fk    
+    orderdate       d       default should taken as system date
+    ordervalue      n(7,2)  it shoule be non-zero and non-negative
+
+  ORDERNO     CUSTNO ORDERDATE ORDERVALUE
+---------- ---------- --------- ----------
+         1        101 05-JUN-20     0
+         2        101 30-MAY-20     0
+         3            05-JUN-20     0
+
+orderdetails
+    orderno     n(3)     fk                                         
+    itemno      n(3)     fk
+    qty         n(3)    non-zero and non-negative
+    (orderno + itemno)   pk
+
+ORDERNO    ITEMNO    QTY
+---------- ---------- --------- 
+    1       901         3                   
+    1       902         5
+    1       903         2
+
+
+    2       901         1
+    2       902         5
+
+    3       901         10
+
+
+INSERT INTO orderdetails
+VALUES (1, 901, 3);
+
+INSERT INTO orderdetails
+VALUES (1, 902, 5);
+
+INSERT INTO orderdetails
+VALUES (1, 903, 2);
+
+
+
+CREATE  TABLE  customers
+(custno   number(3)    CONSTRAINT  customers_custno_pk   primary  key,
+ custname varchar2(20) CONSTRAINT  customers_custname_nn  not null,
+ address  varchar2(150),
+ phone    varchar2(15)
+);
+
+ INSERT  INTO  customers
+ VALUES (101, 'abc corp', 'chennai', '1234567');
+
+ INSERT  INTO  customers
+ VALUES (102, 'amrutha corp', 'pune', '1234567');
+
+CREATE TABLE items
+(itemno number(3) CONSTRAINT items_itemno_pk primary key,
+itemname varchar(20) CONSTRAINT items_itemname_nn not null,
+unitprice number(7,2) CONSTRAINT items_unitprice_ch check(unitprice > 0),
+opstock number(4)
+);
+
+INSERT  INTO  items
+VALUES (901, 'mouse', 100, 0);
+
+INSERT  INTO  items
+VALUES (902, 'webcam', 800, 0);
+
+INSERT  INTO  items
+VALUES (903, 'ram', 1200, 0);
+
+ 
+
+Normalization:  (database design)
+----------------------------------
+is all about spliting a table into smaller multiple tables.
+
+1NF   : multi-valued columns are not allowed and should have primary key
+2NF   : 1NF && functional dependency
+3NF   : 2NF && not transitive dependency
+
+
+CREATE  TABLE  orders
+(orderno   number(3)  CONSTRAINT  orders_orderno_pk  PRIMARY KEY,
+ custno    number(3)  CONSTRAINT  orders_custno_fk   REFERENCES  customers(custno),
+ orderdate date                                      DEFAULT   SYSDATE,
+ ordervalue number(7,2)  CONSTRAINT orders_ordervalue_chk  CHECK (ordervalue >= 0)
+);
+
+INSERT  INTO  orders (orderno, custno, ordervalue)
+VALUES (1, 101, 0);
+
+INSERT  INTO  orders 
+VALUES (2, 101, '30-may-20' , 0);
+
+INSERT  INTO  orders (orderno, ordervalue)
+VALUES (3, 0);
+
+
+CREATE  TABLE  orderdetails
+(orderno  number(3) CONSTRAINT  orderdetails_orderno_fk  REFERENCES  orders(orderno),
+ itemno   number(3) CONSTRAINT  orderdetails_itemno_fk   REFERENCES  items(itemno),
+ qty      number(3) CONSTRAINT  orderdetails_qty_chk     CHECK (qty > 0),
+ CONSTRAINT  orderdetails_orderno_itemno_pk   PRIMARY KEY(orderno, itemno)
+);
+
+
+
+constraints can be defined in TWO ways.
+1) column level constraint specification:
+        is used only when we want to give constraints for a single column
+2) table level constraint specification:
+        is used to give constraints for a single column or combination of columns.
+
+
+Note:
+-----
+1) we cannot delete row from a parent table when we have corresponding rows in the child table.
+
+
+CREATE  TABLE  DEPTS
+(deptno  number(3) CONSTRAINT  depts_deptno_pk  PRIMARY KEY,
+ dname   varchar2(20)
+);
+
+INSERT  INTO  DEPTS
+VALUES (1, 'SALES');
+
+INSERT INTO DEPTS
+VALUES (2, 'ACCOUNTS');
+
+CREATE  TABLE  EMPS
+(empno   number(3)  CONSTRAINT  emps_empno_pk  PRIMARY KEY,
+ ename   varchar2(10),
+ deptno  number(3) CONSTRAINT  emps_deptno_fk REFERENCES depts(deptno)  ON DELETE CASCADE
+);
+
+INSERT INTO EMPS
+VALUES (100, 'KUMAR', 1);
+
+INSERT INTO EMPS
+VALUES (101, 'RAGHU', 1);
+
+INSERT INTO EMPS
+VALUES (103, 'KIRAN', 2);
+
+INSERT INTO EMPS
+VALUES (104, 'SRINU', 1);
+
+
+DELETE FROM DEPTS
+WHERE deptno = 1;
+
+
+how do you see various constraints given on a table?
+----------------------------------------------------
+SELECT  constraint_type, constraint_name
+FROM    user_constraints
+WHERE   table_name = 'orderdetails';
+
+meta data (data directory | data dictionary):
+-----------------------------------------------
+data about data
+eg: user_constraints, user_tables
+
+ALTER   TABLE:
+===============
+to modify the structure of the table.
+WE CAN ADD
+    new columns
+    new constraints
+WE CAN REMOVE
+    existing columns
+    existing constraints
+WE CAN MODIFY
+    column types, size
+
+syntax:
+-------
+ALTER   TABLE  tablename
+[ADD | MODIFY | DROP]   column specification   [ENABLE | DISABLE]
+
+
+CREATE  TABLE  emp2
+(empno  number(2),
+ ename  varchar2(4)
+);
+
+INSERT  INTO  emp2
+VALUES (10, 'ravi');
+
+INSERT  INTO  emp2
+VALUES (15, 'ramu');
+
+ALTER  TABLE  emp2
+ADD  (desg  varchar2(10), salary number(7,2), deptno  number(3));
+
+ALTER  TABLE  emp2
+MODIFY  (ename  varchar2(6));
+
+INSERT  INTO  emp2 (empno, ename)
+VALUES (12, 'sundar');
+
+ALTER  TABLE  emp2
+MODIFY  (ename  varchar2(5));
+
+ALTER  TABLE  emp2
+DROP  COLUMN deptno;
+
+ALTER  TABLE  emp2
+DROP  (desg, salary);
+
+ALTER  TABLE  emp2
+ADD  CONSTRAINT  emp2_empno_pk PRIMARY KEY(empno);
+
+ALTER  TABLE  emp2
+ADD (salary  number(7,2) CONSTRAINT  emp2_salary_chk  CHECK(salary >= 10000));
+
+ALTER  TABLE emp2
+DROP  PRIMARY KEY;
+(or)
+ALTER  TABLE  emp2
+DROP  CONSTRAINT emp2_empno_pk;
+
+ALTER  TABLE  emp2
+DROP  CONSTRAINT emp2_salary_chk;
+
+
+user name : sys as sysdba
+password : ....
+----------------------------------------------------------------------------------------------------
+-=======================================================================================================-
+08/06//2020
+-=======================================================================================================-
+
+
+default user names:  (admin accounts)
+system
+sys
+
+Database users:
+---------------
+1) End users  (Naive Users)
+2) Developers
+3) Adminstrators - installing, creating and managing user accounts, managing databases
+
+from oracle 10g, they offer one special account 
+user name : hr
+password : hr
+
+1) first connect as system or sys.
+2) then use the following steps:
+
+sql> alter user hr account unlock;
+account unlocked
+
+sql> alter user hr identified by hr;
+user altered
+
+sql> connect
+user name : hr
+password : hr
+
+sql> show user
+user is "hr"
+
+
+In order to talk to a database, we need SQL (Structured Query Language)
+sequel is the initial name for SQL.
+
+Various RDBMS products:
+-----------------------
+1) Oracle
+2) MS SQL Server
+3) MySQL
+4) SQLite
+5) PostGre SQL
+
+SQL Commands are classified as ...
+1) DDL  (data definition language) commands     [CREATE | RENAME | ALTER | TRUNCATE | DROP]
+2) DML  (data manipulation)                     [INSERT | UPDATE | DELETE]
+3) DCL  (data control)                          [GRANT | REVOKE]
+4) DQL / DRL  (data query / data retrieval)     [SELECT]
+5) TCL  (Transaction control)                   [COMMIT | ROLLBACK | SAVEPOINT]
+
+1) SQL is Case InSensitive Language.
+2) Clauses must be given in different lines.
+3) table names are plural.
+4) SQL command must be terminated by a semi-colon(;)
+
+
+SQL Data types:
+----------------
+1) CHAR([w])    : to store fixed-length values, whose width can be 2000 characters.
+                  default width 1.  (spaces are embedded)
+2) VARCHAR(w)   : to store varying-length values, whose width can be 4000 characters.
+   VARCHAR2(w)
+
+   till oracle 6 version, it was called as VARCHAR.
+   later on oracle calling it as VARCHAR2
+3) NUMBER(w [,s])   numeric values upto width 'w' and scale 's'.
+4) DATE         : to store data values within range Jan 1 st 4712 B.C. to 31 st Dec 9999 A.D.
+                  default date format is dd-mon-yyyy   (eg: 05-jun-2020)
+
+5) LONG         : to store large amount of data upto 2GB.
+                  only one LONG column is allowed per table.
+6) RAW          : to store binary data such as images, pictures upto 2000 bytes.
+7) LONG RAW     : LONG + RAW
+
+
+
+creating a table:
+-----------------
+CREATE   TABLE   tablename
+(column_name    datatype,
+ column_name    datatype,
+ .....
+)
+
+emps (empno, ename, doj, salary)
+
+CREATE  TABLE emps
+(empno   number(4),
+ ename   varchar2(20),
+ doj     date,
+ salary  number(7,2)
+ );
+
+how to diplay all your tables?
+-------------------------------
+SELECT tname
+FROM   tab;
+
+(or)
+
+SELECT  table_name
+FROM    user_tables;
+
+how to display the structure of the table?
+--------------------------------------------
+structure - column name and other details.
+
+
+Oracle however offer SQL commands.
+Apart from that, Oracle created some extra commands, known as SQL*Plus Commands.
+
+DESCRIBE is SQL*Plus commands and hence it do not need semi-colon terminator.
+it can be abbreviated.
+
+DESCRIBE   emps
+(or)
+DESC   emps
+
+INSERT: 
+1) to add new rows.
+2) character and date literals must be enclosed within single quotes.
+
+syntax:
+-------
+INSERT   INTO  tablename  [ (col-1, col-2, ...) ]
+VALUES   (value-1, value-2, ....);
+
+INSERT INTO emps
+VALUES (101, 'srinivas', '15-sep-2001', 30000 );
+
+INSERT INTO emps (empno, ename, doj)
+VALUES (102, 'prabha' , '16-sep-2001');
+
+INSERT INTO emps 
+VALUES (104, 'surya', null, 14000);
+
+INSERT INTO emps (empno, doj, salary, ename)
+VALUES (105, '10-oct-2002', 15200, 'sudha');
+
+
+SELECT:
+-------
+to retrieve data 
+
+SELECT  *
+FROM   emps;
+
+UPDATE:
+--------
+TO MODIFY ROWS.
+
+UPDATE   tablename
+SET  col-1 = value-1  [, col-2 = value-2 ,....]
+[WHERE  condition];
+
+UPDATE   emps
+SET  salary = 12300
+WHERE  empno = 102;
+
+UPDATE   emps
+SET  doj = '5-nov-2001'
+WHERE  ename = 'surya';
+
+increase the salary of all employees by 10% of their salary.
+
+UPDATE  emps
+SET  salary = salary + (salary * 10 / 100);
+
+
+DELETE:
+-------
+to delete rows.
+
+DELETE  FROM  tablename
+[WHERE   condition];
+
+DELETE  FROM  emps
+WHERE  empno = 101;
+
+DELETE  FROM  emps;
+
+TRUNCATE  TABLE:
+-----------------
+to delete all rows from the table 
+
+TRUNCATE  TABLE  emps;
+
+DROP TABLE:
+-----------
+DROP TABLE emps;
+
+
+                    INTEGRITY CONSTRAINTS
+                    ----------------------
+These are conditions given for a column (or) combination of columns.
+During DML operations, if we violate any of these rules, oracle server generate error message.
+
+constraint:
+----------------------
+1) NOT NULL
+2) UNIQUE
+3) PRIMARY KEY
+4) FOREIGN KEY   (REFERENCES)
+5) CHECK  (condition)
+
+constraint options:
+---------------------
+  do not allow constraint names.
+
+1) DEFAULT
+2) ENABLE / DISABLE
+3) ON DELETE CASCADE   (specified in conjunction with REFERENCES)
+
+primary key:   (not null && unique)
+-----------------------------------------
+1) is used to identify uniquely each row
+2) a table can have only one primary key
+3) null values are not allowed
+4) duplicate values are not allowed
+5) it is a single column or combination of columns
+5) for every primary key, a unique is index is generated automatically. 
+   this index is used by "Query Optimizer" whenever a predicate clause is used while querying.
+
+foreign key :
+----------------------------------------
+1) used to establish a relation between parent (master | independent) and child tables (dependent)
+2) it always present in child table
+3) it is a column or combination of columns   
+4) null values are allowed
+5) duplicates are also allowed.
+6) every foreign key must be defined as primary key or unique key in it's parent table.
+7) a table can have many foreign key
+
+
+
+alternate key:
+---------------
+
+complex key:   (composite key)
+----------------------------------
+if any constraint is given for combination of columns then such combination is called complex key.
+
+
+
+                            ORDER PROCESSING SYSTEM
+                            -----------------------
+customers
+    custno          n(3)    pk
+    custname        v(20)   nn
+    address         v(150)
+    phone           v(15)
+
+items
+    itemno          n(3)    pk
+    itemname        v(20)   nn
+    unitprice       n(7,2)  it should be non-zero and non-negative
+    opstock         n(4)    
+
+  ITEMNO ITEMNAME              UNITPRICE    OPSTOCK
+---------- -------------------- ---------- ----------
+       901 mouse                       100          0
+       902 webcam                      800          0
+       903 ram                        1200          0
+orders
+    orderno         n(3)    pk
+    custno          n(3)    fk    
+    orderdate       d       default should taken as system date
+    ordervalue      n(7,2)  it shoule be non-zero and non-negative
+
+  ORDERNO     CUSTNO ORDERDATE ORDERVALUE
+---------- ---------- --------- ----------
+         1        101 05-JUN-20     0
+         2        101 30-MAY-20     0
+         3            05-JUN-20     0
+
+orderdetails
+    orderno     n(3)     fk                                         
+    itemno      n(3)     fk
+    qty         n(3)    non-zero and non-negative
+    (orderno + itemno)   pk
+
+ORDERNO    ITEMNO    QTY
+---------- ---------- --------- 
+    1       901         3                   
+    1       902         5
+    1       903         2
+
+
+    2       901         1
+    2       902         5
+
+    3       901         10
+
+
+INSERT INTO orderdetails
+VALUES (1, 901, 3);
+
+INSERT INTO orderdetails
+VALUES (1, 902, 5);
+
+INSERT INTO orderdetails
+VALUES (1, 903, 2);
+
+
+
+CREATE  TABLE  customers
+(custno   number(3)    CONSTRAINT  customers_custno_pk   primary  key,
+ custname varchar2(20) CONSTRAINT  customers_custname_nn  not null,
+ address  varchar2(150),
+ phone    varchar2(15)
+);
+
+ INSERT  INTO  customers
+ VALUES (101, 'abc corp', 'chennai', '1234567');
+
+ INSERT  INTO  customers
+ VALUES (102, 'amrutha corp', 'pune', '1234567');
+
+CREATE TABLE items
+(itemno number(3) CONSTRAINT items_itemno_pk primary key,
+itemname varchar(20) CONSTRAINT items_itemname_nn not null,
+unitprice number(7,2) CONSTRAINT items_unitprice_ch check(unitprice > 0),
+opstock number(4)
+);
+
+INSERT  INTO  items
+VALUES (901, 'mouse', 100, 0);
+
+INSERT  INTO  items
+VALUES (902, 'webcam', 800, 0);
+
+INSERT  INTO  items
+VALUES (903, 'ram', 1200, 0);
+
+ 
+
+Normalization:  (database design)
+----------------------------------
+is all about spliting a table into smaller multiple tables.
+
+1NF   : multi-valued columns are not allowed and should have primary key
+2NF   : 1NF && functional dependency
+3NF   : 2NF && not transitive dependency
+
+
+CREATE  TABLE  orders
+(orderno   number(3)  CONSTRAINT  orders_orderno_pk  PRIMARY KEY,
+ custno    number(3)  CONSTRAINT  orders_custno_fk   REFERENCES  customers(custno),
+ orderdate date                                      DEFAULT   SYSDATE,
+ ordervalue number(7,2)  CONSTRAINT orders_ordervalue_chk  CHECK (ordervalue >= 0)
+);
+
+INSERT  INTO  orders (orderno, custno, ordervalue)
+VALUES (1, 101, 0);
+
+INSERT  INTO  orders 
+VALUES (2, 101, '30-may-20' , 0);
+
+INSERT  INTO  orders (orderno, ordervalue)
+VALUES (3, 0);
+
+
+CREATE  TABLE  orderdetails
+(orderno  number(3) CONSTRAINT  orderdetails_orderno_fk  REFERENCES  orders(orderno),
+ itemno   number(3) CONSTRAINT  orderdetails_itemno_fk   REFERENCES  items(itemno),
+ qty      number(3) CONSTRAINT  orderdetails_qty_chk     CHECK (qty > 0),
+ CONSTRAINT  orderdetails_orderno_itemno_pk   PRIMARY KEY(orderno, itemno)
+);
+
+
+
+constraints can be defined in TWO ways.
+1) column level constraint specification:
+        is used only when we want to give constraints for a single column
+2) table level constraint specification:
+        is used to give constraints for a single column or combination of columns.
+
+
+Note:
+-----
+1) we cannot delete row from a parent table when we have corresponding rows in the child table.
+
+
+CREATE  TABLE  DEPTS
+(deptno  number(3) CONSTRAINT  depts_deptno_pk  PRIMARY KEY,
+ dname   varchar2(20)
+);
+
+INSERT  INTO  DEPTS
+VALUES (1, 'SALES');
+
+INSERT INTO DEPTS
+VALUES (2, 'ACCOUNTS');
+
+CREATE  TABLE  EMPS
+(empno   number(3)  CONSTRAINT  emps_empno_pk  PRIMARY KEY,
+ ename   varchar2(10),
+ deptno  number(3) CONSTRAINT  emps_deptno_fk REFERENCES depts(deptno)  ON DELETE CASCADE
+);
+
+INSERT INTO EMPS
+VALUES (100, 'KUMAR', 1);
+
+INSERT INTO EMPS
+VALUES (101, 'RAGHU', 1);
+
+INSERT INTO EMPS
+VALUES (103, 'KIRAN', 2);
+
+INSERT INTO EMPS
+VALUES (104, 'SRINU', 1);
+
+
+DELETE FROM DEPTS
+WHERE deptno = 1;
+
+
+how do you see various constraints given on a table?
+----------------------------------------------------
+SELECT  constraint_type, constraint_name
+FROM    user_constraints
+WHERE   table_name = 'orderdetails';
+
+meta data (data directory | data dictionary):
+-----------------------------------------------
+data about data
+eg: user_constraints, user_tables
+
+ALTER   TABLE:
+===============
+to modify the structure of the table.
+WE CAN ADD
+    new columns
+    new constraints
+WE CAN REMOVE
+    existing columns
+    existing constraints
+WE CAN MODIFY
+    column types, size
+
+syntax:
+-------
+ALTER   TABLE  tablename
+[ADD | MODIFY | DROP]   column specification   [ENABLE | DISABLE]
+
+
+CREATE  TABLE  emp2
+(empno  number(2),
+ ename  varchar2(4)
+);
+
+INSERT  INTO  emp2
+VALUES (10, 'ravi');
+
+INSERT  INTO  emp2
+VALUES (15, 'ramu');
+
+ALTER  TABLE  emp2
+ADD  (desg  varchar2(10), salary number(7,2), deptno  number(3));
+
+ALTER  TABLE  emp2
+MODIFY  (ename  varchar2(6));
+
+INSERT  INTO  emp2 (empno, ename)
+VALUES (12, 'sundar');
+
+ALTER  TABLE  emp2
+MODIFY  (ename  varchar2(5));
+
+ALTER  TABLE  emp2
+DROP  COLUMN deptno;
+
+ALTER  TABLE  emp2
+DROP  (desg, salary);
+
+ALTER  TABLE  emp2
+ADD  CONSTRAINT  emp2_empno_pk PRIMARY KEY(empno);
+
+ALTER  TABLE  emp2
+ADD (salary  number(7,2) CONSTRAINT  emp2_salary_chk  CHECK(salary >= 10000));
+
+ALTER  TABLE emp2
+DROP  PRIMARY KEY;
+(or)
+ALTER  TABLE  emp2
+DROP  CONSTRAINT emp2_empno_pk;
+
+ALTER  TABLE  emp2
+DROP  CONSTRAINT emp2_salary_chk;
+
+
+Assignment for 5-jun-2020
+--------------------------------------
+1) what is the meaning of oracle?
+
+2)  create a table dept3 with the following structure.
+        deptno  n(3)   
+        dname   v(20)
+    
+    use the alter table to do the following tasks.
+    a) add a new field "location" whose width is 10 characters.
+    b) add a primary key constraint.
+    c) add a constraint such that the department name should be either accounts, sales or marketing only.
+        alter table dept3
+        modify dname constraint dept3_dname_chk check (dname = 'accounts' or dname = 'sales')
+    d) add a contraint such that default location is "bengaluru".
+
+3)  create a table emp3 with the following structure.
+        empno  n(3)
+        ename   v(20)
+        deptno   n(3)
+
+    use the alter table to do the following tasks.
+    a) add a primary key
+    b) add foreign key on deptno column
+    c) add a new column mgr  (represents manager)
+
+    alter table emp3
+    add (constraint emp3_mgr_fk foreign key(mgr) references emp3(empno));
+
+
+    d) add a foreign key on mgr column.
+
+4) write a command to remove all values in "dname" column in "dept3" table.
+
+
+GUI Tools:
+-----------
+1) SQL Developer
+2) Oracle Application Express 
+3) Toad
+
+
+SELECT:
+-------
+to retrieve rows.
+we can perform relational algebra operations.
+a) projection   : selecting few columns
+b) restriction : selecting few rows based on a criteria   (WHERE)
+c) join : retrieving data from multiple tables.
+d) union
+e) intersection
+f) cartesian product
+g) difference
+
+
+
+
+SELECT   column_list / *
+FROM     tablename
+[WHERE condition];
+
+SELECT  job_id, job_title
+FROM    jobs;
+
+SELECT department_id, department_name
+FROM   departments;
+
+SELECT employee_id, first_name, hire_date, job_id, salary, commission_pct
+FROM employees;
+
+
+SELECT command can perform the following 4 operations.
+a) arithmetic operations
+b) column aliases
+    alternate name given for columns in the output of SELECT command.
+    column aliases must be enclosed within double quotes unless it is a single word.
+    optionally we may use "AS" keyword after the column name in the SELECT list.
+
+c) concatenated columns
+    combining two or more columns.
+    using concatenation operator ( || )   - double pipe symbol
+d) literals
+    literals must be enclosed within single quotes.
+    it is repeated for each row in the output of the select command.
+
+display commission amount earned by each employee.
+
+SELECT employee_id, first_name, salary, commission_pct, salary*commission_pct
+FROM   employees;
+
+
+display the full name of each employee.
+
+SELECT first_name || last_name AS "Employee Name"
+FROM employees;
+
+SELECT first_name || ' ' || last_name AS "Employee Name"
+FROM employees;
+
+
+
+display the monthly salary which includes commission amount of all employees.
+
+SELECT employee_id, first_name,  salary, commission_pct, salary*commission_pct, salary + salary*commission_pct 
+FROM  employees;
+
+SELECT employee_id, first_name,  salary, 
+commission_pct AS "commission percentage", 
+salary*commission_pct AS "Commission Amount", 
+salary + salary*commission_pct AS "Monthly Salary"
+FROM  employees;
+
+null:
+-----
+null means either unassigned, unpredicted or undetermined.
+if a column value during insertion, by default it contain null value.
+null is not same as ZERO.
+it occupy ONE BYTE in the oracle internal storage overhead.
+any operation performed with NULL value, leads to NULL result.
+
+handling null values using NVL() library functions:
+------------------------------------------------------
+NVL(col/expr, non-null-value)
+for every occurance of null value in the col/expr, is substituted with non-null-value specified.
+
+SELECT employee_id, first_name,  salary, 
+commission_pct AS "commission percentage", 
+salary*commission_pct AS "Commission Amount", 
+salary + salary*NVL(commission_pct,0) AS "Monthly Salary"
+FROM  employees;
+
+
+DISTINCT qualifier:
+---------------------
+eliminate duplicate rows in the output of SELECT command.
+
+SELECT DISTINCT department_id
+FROM employees;
+
+SELECT DISTINCT job_id
+FROM employees;
+
+SELECT DISTINCT department_id, job_id
+FROM employees;
+
+WHERE clause:
+---------------
+it is for restriction operation.
+
+arithmetic operators: + - * / 
+relational operators : > < = >= <= !=  (or) <>
+logical operators : and, or, not    
+
+display all employees who earn salary more than 15000.
+
+SELECT first_name, salary
+FROM  employees
+WHERE salary > 15000;
+
+display all employees who are working department 50.
+
+SELECT first_name, department_id
+FROM employees
+WHERE department_id = 50;
+
+display the details of Steven.
+
+SELECT employee_id, first_name, job_id, salary
+FROM employees
+WHERE first_name = 'Steven';
+
+display all employees who were joined on or before 31st december 2005.
+
+SELECT employee_id, first_name, hire_date
+FROM employees
+WHERE hire_date <= '31-dec-2005';
+
+display all employees who are working department 50 and earn salary less than 10000.
+
+SELECT employee_id, first_name, department_id, salary
+FROM employees
+WHERE department_id = 50
+AND salary < 10000;
+
+display all employees who are sales managers or who earn more than 10000.
+
+SELECT employee_id, first_name, job_id, salary
+FROM employees
+WHERE job_id =  'SA_MAN'
+OR salary > 10000;
+
+display all employees except purchase clerks.
+
+SELECT employee_id, first_name, job_id, salary
+FROM employees
+WHERE job_id != 'PU_CLERK';
+
+SQL Operators:
+-------------
+a) BETWEEN value-1 AND value-2
+b) IN (value-1, value-2, ...)
+c) LIKE 'character pattern'
+`   wild card character:
+    i)  _  underscore   : replace single unknown character.
+    ii) %               : replace group of unknown characters.
+
+d) IS NULL
+
+Negation Operators:
+---------------------
+a) NOT BETWEEN
+b) NOT IN
+c) NOT LIKE
+d) IS NOT NULL
+
+
+
+SELECT employee_id, first_name, salary
+FROM employees
+WHERe salary BETWEEN 10000 AND 15000;
+
+SELECT employee_id, first_name, department_id
+FROM employees
+WHERE department_id IN (30,50,70,90);
+
+
+SELECT employee_id, first_name
+FROM employees
+WHERE first_name LIKE '%n%';
+
+SELECT employee_id, first_name
+FROM employees
+WHERE first_name LIKE '_o%';
+
+SELECT employee_id, first_name
+FROM employees
+WHERE first_name LIKE '____';   (4 underscores)
+
+
+display all employees who were joined in the year 2005.
+
+SELECT employee_id, first_name, hire_date
+FROM employees
+WHERE hire_date like '%-05';
+
+display all employees who do not earn any commission percentage.
+
+SELECT employee_id, first_name, commission_pct
+FROM employees
+WHERE commission_pct IS NULL;
+
+ORDER BY:
+---------
+normally the order of retrieval of rows using SELECT statement is insignificant. However we can use 
+ORDER BY clause to specify the sorting order. 
+If used, it must be the last clause in the SELECT statement.
+
+SELECT employee_id, first_name, salary
+FROM employees
+ORDER BY salary DESC;
+
+SELECT employee_id, first_name, salary
+FROM employees
+ORDER BY salary DESC, first_name ASC;
+
+SELECT employee_id, first_name, department_id, job_id, salary
+FROM employees
+WHERE department_id = 50
+ORDER BY 3, 4, 5 DESC, 2 DESC;
+
+-- ORDER BY department_id, job_id, salary DESC, first_name DESC;
+
+
+display all employees in the descending order of Monthly salary.
+
+
+                            Library functions   
+                            -----------------
+1) character functions (string functions)
+2) numeric functions
+3) date functions
+4) conversion functions
+5) functions that accept any datatype as input
+6) group functions (or aggregate) functions
+
+character functions:
+---------------------
+1) upper(), lower(), initcap(), length()
+   ltrim() : remove leading spaces
+   rtrim() : remove trailing spaces
+   trim() : remove both leading spaces.
+   lpad()
+   rpad()
+   SELECT rpad(first_name, 10, '+')
+    FROM employees;
+    
+    substr()
+    SELECT substr('Srinivas',3,2)
+from DUAL;
+
+    SELECT INSTR('Srinivas', 'i')
+FROM DUAL;
+
+DUAL : It is a dummy table in oracle which has exactly one row and one column.
+
+
+2) number functions:
+----------------------
+abs(), power(), sqrt(),
+sin(x), cos(x) : x is taken as radians.
+ceil(), floor(), round(), trunc()
+
+SELECT SIN(3.14/2)
+FROM DUAL;
+
+SELECT CEIL(15.8), FLOOR(15.8), ROUND(15.8), ROUND(15.5), TRUNC(15.8)
+FROM DUAL;
+
+3) date functions:
+-------------------
+SYSDATE : It is a pseudo column in oracle which contain system date.
+
+SELECT SYSDATE, SYSDATE+3650, SYSDATE-45
+FROM DUAL;
+
+a) ADD_MONTHS(date, n)
+SELECT ADD_MONTHS(SYSDATE, 5), ADD_MONTHS(SYSDATE, -30)
+FROM DUAL;
+b) MONTHS_BETWEEN(date-1, date-2)
+SELECT employee_id, first_name, hire_date, TRUNC(MONTHS_BETWEEN(SYSDATE, HIRE_DATE)) AS "Service in Months"
+FROM employees;
+c) LAST_DAY()
+SELECT LAST_DAY(SYSDATE)
+FROM DUAL;
+d) NEXT_DAY(date, 'week-day-name')
+SELECT NEXT_DAY(SYSDATE, 'FRIDAY')
+FROM DUAL;
+
+
+4) conversion functions:
+-------------------------
+TO_CHAR(), TO_DATE()
+
+TO_CHAR(date, 'date-picture')
+
+DD, DAY, DDD
+MM, MON, MONTH
+YY, YYYY
+
+HH, HH24, MI, SS
+AM / PM
+
+SELECT  TO_CHAR(SYSDATE, 'DD-MM-YYYY')
+FROM DUAL;
+
+SELECT TO_CHAR(SYSDATE, 'DAY')
+FROM DUAL;
+
+SELECT TO_CHAR(SYSDATE, 'DDD')
+FROM DUAL;
+
+
+TO_DATE()
+---------
+to insert dates in any desired format.
+
+INSERT INTO emps (empno, ename, doj)
+VALUES (1, 'srnivas', '07-jun-2020');
+
+INSERT INTO emps (empno, ename, doj)
+VALUES (1, 'srnivas', to_date('07-06-2020', 'dd-mm-yyyy'));
+
+
+5) functions that can acceptany type as input:
+------------------------------------------------
+1) decode (col/expr, search-1, result-1, search-2, result-2, ....., default)
+
+SELECT employee_id, first_name, department_id, 
+DECODE (department_id, 70, 'Sales', 80, 'Purchases', 90, 'Accounting', 100, 'Software', 'General Staff') AS "Department Name" 
+FROM employees;
+
+2) CASE expression / CASE statement:
+
+CASE  
+    WHEN condition THEN result,
+    WHEN condition THEN result,
+    ...
+CASE ELSE
+    result
+END CASE
+
+SELECT employee_id, first_name, salary,
+CASE 
+    WHEN salary > 15000 THEN 'Highly Skilled'
+    WHEN salary > 5000  THEN 'Semi Skilled'
+    ELSE 'Un Skilled'
+END AS "Status"
+FROM employees;
+
+
+SELECT first_name, job_id, 
+   case  job_id
+      when  'AD_PRES'  then  'Advertisement President'
+      when  'AD_VP'    then  'Advertisement Vice President'
+      when  'IT_PROG'  then  'IT Programmer'
+      when  'FI_MGR'   then  'Finance Manager'
+   else  'Unknown'
+   end  as "Designation"
+from  employees;  
+
+
+3) NVL()
+
+
+
+
+6) Group Functions (Aggregate Functions):
+-----------------------------------------
+sum(), avg(), min(), max(), count()
+these functions work on groups or rows rather than on the entire table.
+
+SELECT SUM(salary), MAX(salary), MIN(salary), AVG(salary)
+FROM employees;
+
+SELECT COUNT(*)
+FROM employees;
+
+SELECT COUNT(employee_id), COUNT(commission_pct)
+FROM employees;
+
+SELECT SUM(commission_pct) 
+FROM employees;
+
+
+                                Transaction Processing Commands
+                                ---------------------------------
+Transaction: It is a LOGICAL UNIT OF WORKDONE.
+
+1) COMMIT
+2) ROLLBACK
+3) SAVEPOINT
+
+DDL Transaction : ONE DDL Command will make up ONE Successful Transaction.
+DML Transaction : Several DML Commands will make up ONE Transactions.
+
+Note: The data once COMMITted cannot be ROLLBACKed.
+
+sql> I
+sql> I
+sql> U
+sql> U
+sql> D
+sql> CREATE TABLE ...
+
+If the transaction ends ...
+a) Exit from SQL*Plus   =>    (S)
+b) Logout               =>    (S)
+c) COMMIT               =>    (S)
+d) ROLLBACK             =>    (U)
+e) Network error        =>    (U)
+f) Dead locks           =>    (U)
+g) DDL Command          =>    (S)
+
+
+GROUP BY and HAVING clause:
+----------------------------
+is used to divide data into groups of rows and on each group we can perform group functions
+to obtain summary data.
+
+display total salary for each department.
+
+SELECT  department_id, SUM(salary)
+FROM employees
+GROUP BY department_id
+ORDER BY department_id;
+
+display average salary for each job
+
+SELECT  job_id, AVG(salary)
+FROM employees
+GROUP BY job_id
+ORDER BY job_id;
+-==============================================================================================================-
+09/06/2020
+-===============================================================================================================-
+display the no. of employees in each department.
+
+SELECT department, COUNT(employee_id)
+FROM employees
+GROUP BY department_id;
+
+display total salary of each job except for IT Managers.
+
+SELECT job_id, SUM(salary)
+FROM employees
+WHERE job_id != 'IT_MAN'
+GROUP BY job_id
+ORDER BY job_id;
+
+display average salary for each job within department.
+
+SELECT department_id, job_id, avg(salary)
+FROM   employees
+GROUP BY department_id, job_id
+ORDER BY department_id, job_id;
+
+
+display total no. of employees for each job, but when the job contains atleast 3 employees.
+
+SELECT COUNT(*)
+FROM employees
+GROUP BY job_id
+HAVING COUNT(*) >= 3
+ORDER BY job_id;
+
+Note:
+    We cannot use group function with WHERE clause.
+
+What is the difference between WHERE and HAVING clause?
+-------------------------------------------------------
+WHERE is to filter rows before grouping.
+HAVING is to filter groups.
+
+JOIN:
+-----
+to get data from multiple tables. (relation should be there between tables)
+
+NATURAL JOIN:
+---------------
+will compare all common columns between two tables, and return matching rows.
+
+select employee_id, first_name, department_id, department_name
+from employees
+NATURAL JOIN departments;
+
+select employee_id, first_name, department_id, department_name
+from employees
+INNER JOIN departments
+USING (department_id);
+
+display employee_id, first_name, job_title, department_name of all employees.
+
+SELECT employee_id, first_name, job_title, department_name
+FROM employees
+INNER JOIN jobs
+USING (job_id)
+INNER JOIN departments
+USING (department_id);
+
+ON clause:
+----------
+select employee_id, first_name, employees.department_id, department_name
+from employees
+INNER JOIN departments
+ON (employees.department_id = departments.department_id);
+
+table aliases:
+---------------
+select employee_id, first_name, E.department_id, department_name
+from employees  E
+INNER JOIN departments  D
+ON (E.department_id = D.department_id);
+
+
+Rules to join:
+    Min. no. of join conditions = no. of tables to be joined - 1.
+
+
+OUTER JOIN:
+-----------
+   LEFT OUTER JOIN     :   all matching rows + any unmatched rows from left table
+    RIGHT OUTER JOIN    :   all matching rows + any unmatched rows from right table
+    FULL OUTER JOIN     :   all matching rows + any unmatched rows from both the tables
+
+select employee_id, first_name, department_id, department_name
+from employees
+LEFT OUTER JOIN departments
+USING (department_id);
+
+SELF JOIN: (Joining the table to itself)
+----------------------------------------
+SELECT E.first_name AS "Employee Name", M.first_name AS "Manager Name"
+FROM employees E
+JOIN employees M
+ON (E.manager_id = M.employee_id);
+
+
+SUB Queries:
+------------
+Sub-Queries: (Sub-Select or Inner-Select)
+syntax:
+	select   col-1, col-2, ...
+	from		tablename
+	where	col = 
+		(select  col
+		from		tablename
+		where	condition);
+
+the sub-query is executed first. the result is substituted in the place of sub-query. 
+main query is executed then.
+
+types:
+	a) single-row subquery
+		i) return only one row
+		ii) use single-row comparison operators
+			(=, >, >=, <, <=, !=)
+	b) multiple-row subquery
+		i) return more than one row
+ii) use multiple-row comparison operators
+			(IN, ANY, ALL)
+
+Executing Single Row Sub-Queries:
+display all employees who earn salary more than the salary of employee id 149.
+
+select 	employee_id, first_name, salary
+from 		employees
+where 	salary >
+	(select	salary
+	 from		employees
+	 where  	employee_id = 149);
+
+display all employees who have the same job as Neena.
+
+select  first_name, job_id
+from		employees
+where	job_id = 
+	(select	job_id
+	 from		employees
+	 where	first_name = 'Neena');
+
+display all employees who have the same job as 141 and earn salary more than employee 143.
+
+SELECT employee_id, first_name, job_id, salary
+FROM employees
+WHERE job_id = (SELECT job_id
+FROM employees
+WHERE employee_id = 141)
+AND salary > (
+    SELECT salary 
+    FROM employees
+    WHERe employee_id = 143);
+
+group functions in sub-query:
+
+display all employees who earn more than minimum salary of all employees.
+
+SELECT first_name
+FROM employees
+WHERE salary > 
+    (SELECT min(salary)
+     FROM employees);
+
+
+display minimum salary of all departments having more than minimum salary of 20 department.
+
+SELECT min(salary)
+FROM employees
+GROUP BY department_id
+HAVING min(salary) > 
+    (SELECT min(salary)
+    FROM employees
+    WHERE department_id = 20);
+
+
+
+
+multiple-row sub-queries:
+----------------------------
+display employees who are not IT programmers and 
+whose salary is less than that of any IT programmer.
+
+SELECT first_name
+FROM employees
+WHERE salary < ANY
+    (SELECT salary 
+    FROM employees
+    WHERE job_id = 'IT_PROG')
+AND job_id <> 'IT_PROG';
+
+Note:
+	< ANY  means less than the maximum.
+	> ANY  means more than minimum.
+	= ANY  means IN.
+
+
+display employees who are not IT programmers 
+and whose salary is less than the salary of all IT programmers.
+
+SELECT   employee_id, first_name, job_id, salary
+from  employees
+where  salary < ALL 
+	(select  salary
+	 from  employees
+	 where job_id = 'IT_PROG')
+and	job_id <> 'IT_PROG';
+
+Note:
+	< ALL  means less than the minimum.
+	> ALL means more than the maximum.
+
+	The NOT operator can be used with IN, ANY, ALL operators.
+
+Correlated Subqueries:
+----------------------
+Correlated subqueries are used for row-by-row processing. Each subquery is executed once for every 
+row of the outer query.
+
+1) GET
+	candidate row from outer query
+2) EXECUTE
+	Inner query using candidate row value
+3) USE
+	values from inner query to qualify or disqualify candidate row
+
+syntax:
+	SELECT		col-1, col-2, ....	
+	FROM		table-1	outer
+	WHERE		col-1 	operator
+			(SELECT		col-1, col-2, ...
+			 FROM		table2
+			 WHERE		expr-1 =	outer.expr); 
+
+The subquery references a column from a table in the parent (outer) query.
+
+Find all employees who earn more than the average salary in their department.
+
+SELECT department_id, employee_id, first_name, salary
+FROM employees outer
+WHERE salary > 
+(SELECT AVG(salary)
+ FROM employees
+ WHERE department_id = outer.department_id);
+
+
+Display details of those employees who have switched their job atleast twice.
+
+SELECT	outer.employee_id, first_name, outer.job_id
+from	employees	outer
+where	2 <=
+		(select	count(*)
+		 from		job_history
+		 where	employee_id = outer.employee_id);
+
+Assignments:
+-------------------------
+How to copy a table?
+How to rename a table?
+How to rename a column?
+How to use select statement with insert?
+create a table, and a view on that. is it possible to delete a record from view?
+is it possible to update / insert records through view?
+display employee details who earn second highest salary.
+experiment with ALTER SEQUENCE command?
+findout atleast 5 extra library functions in each category.
+ALTER INDEX command.
+
+
+SELECT *
+FROM employees
+WHERE 1 = 1;
+
+
+Top-N analysis:
+----------------
+display top 3 earners.
+
+SELECT *
+FROM employees X
+WHERE 3 >= 
+    (SELECT COUNT(DISTINCT salary)
+    FROM employees Y
+    WHERE Y.salary >= X.salary);
+
+ROWNUM : It is a pseduo-column.
+
+SELECT *
+FROM (SELECT employee_id, first_name, salary
+FROM employees
+ORDER BY salary DESC)
+WHERE ROWNUM <= 3;
+
+
+EXISTS:
+-------
+return TRUE if a sub squery returns atleast ONE ROW.
+
+display all departments that has atleast one employee.
+
+SELECT department_id
+FROM departments outer
+WHERE EXISTS
+    (SELECT * FROM employees
+     WHERE department_id = outer.department_id);
+     
+SELECT department_id
+FROM departments d
+WHERE NOT EXISTS
+    (SELECT * FROM employees e
+     WHERE d.department_id = e.department_id);
+
+
+Oracle EXISTS vs. IN:
+---------------------
+The EXISTS operator stops scanning rows once the subquery returns the first row 
+because it can determine the result, 
+whereas the IN operator must scan all rows returned by the subquery to conclude the result.
+
+In addition, the IN clause can’t compare anything with NULL values, 
+but the EXISTS clause can compare everything with NULL values
+
+
+VIEWS:
+	* It is a database object.
+	* It is like a window, through which we can retrieve data from an underlying table, 
+      known as base table.
+	* It does not have any data on its own.
+	* It is stored as select statement only.
+	* It is also known as virtual table.
+
+
+syntax:
+	CREATE	[OR	REPLACE]	   VIEW  viewname [(col-1, col-2, ....)]
+	AS
+	select	statement;
+
+The OR REPLACE option is used to overwrite an existing view.
+types:
+	* simple views
+		-- derived from a single table
+		-- contain no group functions or GROUP BY clause
+	* complex views
+		-- derived from multiple tables
+		-- contain group functions or GROUP BY clause.
+
+CREATE OR REPLACE VIEW itprogview
+AS
+SELECT employee_id, first_name, salary, job_id 
+FROM employees
+WHERE	job_id = 'IT_PROG';
+
+executing a view:
+	syntax:
+		SELECT	collist/*
+		FROM	viewname;
+
+select employee_id, first_name, last_name,job_id
+from itprogview
+where department_id = 60;
+
+removing a view:
+	syntax:
+		DROP	VIEW	viewname;
+
+drop view itprogview;
+
+creating a complex view:
+------------------------
+create   or  replace  view employeesalaryaggregateview
+as
+select    sum(salary) as "Total Salary", min(salary) as "Minimum Salary", max(salary) as "Maximum Salary", avg(salary)  "Average Salary"
+from employees;
+
+select *
+from employeesalaryview;
+
+create or replace view departmentdetailsview
+as
+select department_id, department_name, city, first_name, job_title
+from  employees
+join departments
+using (department_id)
+join locations
+using (location_id)
+join jobs
+using (job_id);
+
+
+SET  OPERATORS:
+UNION    : to return all rows excluding duplicates
+UNION    ALL : to return all rows from both the queries
+INTERSECT : to return only common rows
+MINUS : return rows from first query but which are not there in second query.
+
+ex:
+select  job_id  from  employees where  department_id = 10
+union
+select  job_id  from  employees where  department_id = 20;
+
+sequences:
+It is a database object which is used to create sequence numbers.
+
+CREATE		SEQUENCE	sequencename
+START 	WITH		n
+[INCREMENT	BY	m]
+[MAXVALUE  n/ NOMAXVALUE];
+
+create  sequence  department_id_seq
+start 	with	280
+increment by 10
+maxvalue 300;
+
+
+NEXTVAL,  CURRVAL:
+	these are oracle pseudocolumns used to generate next value and retrieve value from the sequence.
+	syntax:
+		sequencename.nextval	(ex: department_id_seq.nextval)
+		sequencename.currval		(ex:department_id_seq.currval)
+
+to see the current value of sequence:
+select	department_id_seq.currval
+from		dual;
+
+drop		sequence 	myseq;
+
+INDEX:
+	it is also a database object.
+	Index is used for faster retrieval of data.
+
+syntax:
+	CREATE		[UNIQUE]		INDEX	indexname
+	ON		tablename(col-1, col-2, ....);
+ex:
+create  index  jobidindex
+on    employees(job_id);
+
+index is automatically used by oracle, whenever we are searching on the indexed column.
+for ex:
+	select	*
+	from		employees
+	where	job_id   like   'A%';
+
+drop  index  jobidindex;
+
+to see all indexes created for a table:
+select * from user_indexes
+where table_name = 'EMPLOYEES';
+1584>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
