@@ -1,0 +1,41 @@
+<?php include('header.php'); ?>
+
+<body>
+<div id="container">
+	<div id="header">
+		<h1>Railway  Management</h1>
+	</div>
+	<div id="trainpic">
+		<img src="railway.jpg" width="1310" height="250" alt="image1">
+	</div>
+	
+	<div id="content">
+	<!-- This is section 2 -->
+
+	<h1> User Registration form</h1>
+		<form action="Passenger.php" method="">
+		    <P>U_id: <input type="text" name="U_id" size="20" maxlength="20" required /></p>
+			<p> Password: <input type="text" name="password" size="20" maxlength="50" /></p>
+			<p> First Name : <input type="text" name="name" size="20" maxlength="40" required /></p>
+			<p> Last Name : <input type="text" name="name" size="20" maxlength="40" required /></p>
+			<p>  Age : <select name="age">
+					<option value="0-10">Under 10</option>
+					<option value="11-20">Between 11-20</option>
+					<option value="21-30">Between 21-30</option>
+					<option value="31-40">Between 31-40</option>
+					<option value="41-50">Between 41-50</option>
+					<option value="51-60">Between 51-60</option>
+					<option value="61-70">Between 61-70</option>
+					<option value="71-80">Between 71-80</option>
+					<option value="81-90">Between 81-90</option>
+					<option value="91-100">Between 91-100</option>
+				</select> </p>
+			 <input type="submit" name="submit" value="submit" />
+			
+		</form>
+	</div>
+
+
+</div>
+</body>
+</html>
